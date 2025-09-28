@@ -9,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Camera, Mic, FileText, AlertCircle, Sparkles } from "lucide-react";
+import { Camera, Mic, FileText, AlertCircle, Sparkles, Loader2 } from "lucide-react";
 import { Loader } from "@/components/loader";
+import { cn } from "@/lib/utils";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -32,6 +33,9 @@ export function CropAdviceForm() {
   const [state, formAction] = useActionState(getCropAdvice, initialState);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const detailsTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState('');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -41,6 +45,46 @@ export function CropAdviceForm() {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMicClick = () => {
+    const recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      setTranscript('Listening...');
+    };
+
+    recognition.onresult = event => {
+      const currentTranscript = Array.from(event.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+      setTranscript(currentTranscript);
+      if (detailsTextareaRef.current) {
+        detailsTextareaRef.current.value = currentTranscript;
+      }
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+      setTranscript('');
+    };
+
+    recognition.onerror = event => {
+      console.error('Speech recognition error', event.error);
+      setIsRecording(false);
+      setTranscript('');
+    };
+
+    if (isRecording) {
+      recognition.stop();
+    } else {
+      recognition.start();
     }
   };
 
@@ -77,8 +121,9 @@ export function CropAdviceForm() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <Input id="image" name="image" type="file" accept="image/*" required onChange={handleImageChange} className="md:col-span-2" />
-            <Button variant="outline" type="button" disabled>
-              <Mic className="mr-2 h-4 w-4" /> Voice Input
+            <Button variant="outline" type="button" onClick={handleMicClick} className={cn(isRecording && 'bg-red-500/20 text-red-500')}>
+              {isRecording ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mic className="mr-2 h-4 w-4" />}
+               {isRecording ? "Stop" : "Voice Input"}
             </Button>
           </div>
         </div>
@@ -86,7 +131,8 @@ export function CropAdviceForm() {
         <Textarea
           id="details"
           name="details"
-          placeholder="Add any extra details, e.g., 'Leaves are turning yellow at the edges.'"
+          ref={detailsTextareaRef}
+          placeholder={isRecording ? transcript : "Add any extra details, e.g., 'Leaves are turning yellow at the edges.'"}
         />
 
         <SubmitButton />
