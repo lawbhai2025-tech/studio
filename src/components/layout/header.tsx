@@ -1,5 +1,4 @@
 
-import { Logo } from "@/components/icons/logo";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { User, Menu } from "lucide-react";
@@ -11,7 +10,6 @@ export function Header() {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2 text-primary">
-            <Logo className="w-8 h-8 text-green-600" />
             <div>
               <h1 className="text-lg font-bold text-gray-900">
                 Krishimitram
