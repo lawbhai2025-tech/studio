@@ -15,21 +15,14 @@ export function AIAdvisory() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="crop-advice">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-1">
             <TabsTrigger value="crop-advice">
               <Leaf className="mr-2 h-4 w-4" />
               Crop Advice
             </TabsTrigger>
-            <TabsTrigger value="scheme-recommendations">
-              <Handshake className="mr-2 h-4 w-4" />
-              Scheme Recommendations
-            </TabsTrigger>
           </TabsList>
           <TabsContent value="crop-advice" className="mt-4">
             <CropAdviceForm />
-          </TabsContent>
-          <TabsContent value="scheme-recommendations" className="mt-4">
-            <SchemeRecommendationsForm />
           </TabsContent>
         </Tabs>
       </CardContent>
