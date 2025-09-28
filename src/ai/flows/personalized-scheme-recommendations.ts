@@ -1,4 +1,4 @@
-// use server'
+'use server';
 
 /**
  * @fileOverview Personalized scheme recommendations for farmers.
@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { searchSchemes } from '../tools/scheme-search-tool';
 
 const PersonalizedSchemeRecommendationsInputSchema = z.object({
   farmerProfile: z
@@ -39,9 +40,10 @@ const prompt = ai.definePrompt({
   name: 'personalizedSchemeRecommendationsPrompt',
   input: {schema: PersonalizedSchemeRecommendationsInputSchema},
   output: {schema: PersonalizedSchemeRecommendationsOutputSchema},
+  tools: [searchSchemes],
   prompt: `You are an expert in recommending government schemes to farmers.
 
-  Based on the following farmer profile, recommend a list of relevant government schemes that the farmer can benefit from.
+  Based on the following farmer profile, recommend a list of relevant government schemes that the farmer can benefit from. Use the provided tool to search for schemes.
 
   Farmer Profile: {{{farmerProfile}}}
 
