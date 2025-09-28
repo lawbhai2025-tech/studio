@@ -4,6 +4,7 @@
 import { z } from 'zod';
 import { getCropAdviceFromImage } from '@/ai/flows/crop-advice-from-image';
 import { personalizedSchemeRecommendations } from '@/ai/flows/personalized-scheme-recommendations';
+import { getChatbotResponse, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
 
 export interface CropAdviceState {
   advice?: string;
@@ -81,5 +82,54 @@ export async function getSchemeRecommendations(
     return { schemes: result.recommendedSchemes };
   } catch (error) {
     return { error: 'An unexpected error occurred. Please try again.' };
+  }
+}
+
+export interface ChatbotState {
+  messages: ChatbotMessage[];
+  error?: string;
+}
+
+const chatbotSchema = z.object({
+  message: z.string().min(1, 'Message is required.'),
+  history: z.string(),
+});
+
+export async function getChatbotResponseAction(
+  prevState: ChatbotState,
+  formData: FormData
+): Promise<ChatbotState> {
+  try {
+    const validatedFields = chatbotSchema.safeParse({
+      message: formData.get('message'),
+      history: formData.get('history'),
+    });
+
+    if (!validatedFields.success) {
+      const history = JSON.parse(formData.get('history') as string) as ChatbotMessage[];
+      return {
+        messages: history,
+        error: validatedFields.error.flatten().fieldErrors.message?.[0] || 'Invalid input.',
+      };
+    }
+
+    const { message, history: historyJSON } = validatedFields.data;
+    const history = JSON.parse(historyJSON) as ChatbotMessage[];
+    const newMessage: ChatbotMessage = { role: 'user', content: message };
+    const newHistory: ChatbotMessage[] = [...history, newMessage];
+
+    const result = await getChatbotResponse({ history: newHistory });
+
+    const responseMessage: ChatbotMessage = { role: 'model', content: result.response };
+
+    return {
+      messages: [...newHistory, responseMessage],
+    };
+  } catch (error) {
+    const history = JSON.parse(formData.get('history') as string) as ChatbotMessage[];
+    return {
+      messages: history,
+      error: 'An unexpected error occurred. Please try again.',
+    };
   }
 }
