@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { User, Menu, Globe, Check } from "lucide-react";
+import { User, Menu, Languages, Check } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useTranslation } from "@/hooks/use-translation";
 import { 
@@ -45,7 +45,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Globe />
+                <Languages />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
