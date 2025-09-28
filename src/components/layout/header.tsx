@@ -1,26 +1,46 @@
+
 import { Logo } from "@/components/icons/logo";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { ChevronDown } from "lucide-react";
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between gap-4 p-4 border-b bg-card">
-      <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-2 text-primary">
-          <Logo className="w-8 h-8" />
-          <h1 className="text-2xl font-bold text-foreground">
-            Krishi Sahayak
-          </h1>
-        </Link>
-        <p className="text-sm text-muted-foreground hidden md:block">
-          Your 24/7 Digital Krishi Officer
-        </p>
+    <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-sm border-b border-gray-200">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-2 text-primary">
+            <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+              <Logo className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">
+                Krishimitram
+              </h1>
+              <p className="text-xs text-gray-500">Kerala Agricultural Assistant</p>
+            </div>
+          </Link>
+        </div>
+        <nav className="hidden md:flex items-center gap-1">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="#" hasDropdown>For Farmers</NavLink>
+          <NavLink href="#">Weather</NavLink>
+          <NavLink href="#" hasDropdown>For Officers</NavLink>
+          <NavLink href="#">Resources</NavLink>
+          <NavLink href="#">Contact</NavLink>
+        </nav>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="hidden lg:flex">Officer Dashboard</Button>
+          <Button className="bg-green-600 hover:bg-green-700">Download App</Button>
+        </div>
       </div>
-      <nav>
-        <Button asChild variant="ghost">
-          <Link href="/chatbot">Chatbot</Link>
-        </Button>
-      </nav>
     </header>
   );
 }
+
+const NavLink = ({ href, children, hasDropdown = false }: { href: string, children: React.ReactNode, hasDropdown?: boolean }) => (
+  <Link href={href} className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-1">
+    {children}
+    {hasDropdown && <ChevronDown className="w-4 h-4" />}
+  </Link>
+)

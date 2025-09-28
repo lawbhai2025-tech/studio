@@ -1,3 +1,4 @@
+
 export function Logo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -10,8 +11,8 @@ export function Logo(props: React.SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M7 20v-2a5 5 0 0 1 5-5h0a5 5 0 0 1 5 5v2" />
-      <path d="M12 13a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4Z" />
+      <path d="M12 22c-5 0-9-2.5-9-5.5S5 11 12 11s9 2.5 9 5.5-4 5.5-9 5.5Z"/>
+      <path d="M12 2c5 0 9 2.5 9 5.5S19 13 12 13 3 10.5 3 7.5 7 2 12 2Z"/>
     </svg>
   );
 }
