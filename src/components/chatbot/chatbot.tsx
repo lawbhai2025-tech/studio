@@ -25,15 +25,22 @@ import { useTranslation } from '@/hooks/use-translation';
 
 export function Chatbot() {
   const { t, language } = useTranslation('chatbot');
-  const [messages, setMessages] = useState<ChatbotMessage[]>([]);
+  const [messages, setMessages] = useState<ChatbotMessage[]>([
+    {
+      role: 'model',
+      content: t('initialMessage'),
+    },
+  ]);
   
   useEffect(() => {
-    setMessages([
-      {
-        role: 'model',
-        content: t('initialMessage'),
-      },
-    ]);
+    // This effect ensures that if the language changes, the initial message is re-translated.
+    // However, we only want to do this if it's the only message.
+    setMessages(currentMessages => {
+      if (currentMessages.length === 1 && currentMessages[0].role === 'model') {
+        return [{ role: 'model', content: t('initialMessage') }];
+      }
+      return currentMessages;
+    });
   }, [t]);
 
 
