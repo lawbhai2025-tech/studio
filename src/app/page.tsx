@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Phone, MapPin, Mic, Camera, LineChart, Bell, ArrowRight, ChevronRight, PlayCircle } from "lucide-react";
 import Link from "next/link";
+import { WeatherCard } from "@/components/features/weather-card";
+import { MandiPrices } from "@/components/features/mandi-prices";
 
 export default function Home() {
   return (
@@ -13,6 +15,7 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <DashboardSection />
       </main>
     </div>
   );
@@ -90,6 +93,25 @@ const HeroSection = () => (
       <div className="relative">
          <div className="absolute -inset-2 bg-gradient-to-br from-green-200 via-emerald-200 to-yellow-100 rounded-full opacity-50 blur-2xl"></div>
         <ChatPreview />
+      </div>
+    </div>
+  </section>
+);
+
+const DashboardSection = () => (
+  <section className="bg-gray-50/70 py-16 md:py-24">
+    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
+          Your Farming Dashboard
+        </h2>
+        <p className="mt-4 text-lg text-gray-600">
+          Live data to help you make informed decisions.
+        </p>
+      </div>
+      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+        <WeatherCard />
+        <MandiPrices />
       </div>
     </div>
   </section>
