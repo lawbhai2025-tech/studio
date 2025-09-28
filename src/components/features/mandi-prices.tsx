@@ -21,9 +21,8 @@ export function MandiPrices() {
           <TableHeader>
             <TableRow>
               <TableHead>Crop</TableHead>
-              <TableHead className="text-right">Min Price</TableHead>
-              <TableHead className="text-right">Max Price</TableHead>
-              <TableHead className="text-right font-semibold">Modal Price</TableHead>
+              <TableHead className="text-right">Price Range (per Quintal)</TableHead>
+              <TableHead className="text-right font-semibold">Modal Price (per Quintal)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -33,15 +32,22 @@ export function MandiPrices() {
                   <p className="font-medium text-gray-800">{item.crop}</p>
                   <p className="text-xs text-gray-500">{item.variety}</p>
                 </TableCell>
-                <TableCell className="text-right text-red-600 flex items-center justify-end gap-1">
-                  <TrendingDown className="w-4 h-4" /> {item.minPrice}
+                <TableCell className="text-right">
+                  <div className="flex justify-end items-center gap-2">
+                    <div className="flex items-center gap-1 text-red-600">
+                      <TrendingDown className="w-4 h-4" /> {item.minPrice}
+                    </div>
+                    <span>-</span>
+                    <div className="flex items-center gap-1 text-green-600">
+                      {item.maxPrice} <TrendingUp className="w-4 h-4" />
+                    </div>
+                  </div>
                 </TableCell>
-                <TableCell className="text-right text-green-600 flex items-center justify-end gap-1">
-                  <TrendingUp className="w-4 h-4" /> {item.maxPrice}
-                </TableCell>
-                <TableCell className="text-right font-bold text-gray-900 flex items-center justify-end gap-1">
-                    <IndianRupee className="w-4 h-4" />
-                    {item.modalPrice}
+                <TableCell className="text-right font-bold text-gray-900">
+                    <div className="flex items-center justify-end gap-1">
+                        <IndianRupee className="w-4 h-4" />
+                        <span>{item.modalPrice}</span>
+                    </div>
                 </TableCell>
               </TableRow>
             ))}
