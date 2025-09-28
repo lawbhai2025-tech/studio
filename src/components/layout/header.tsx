@@ -2,7 +2,7 @@
 import { Logo } from "@/components/icons/logo";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ChevronDown, User } from "lucide-react";
+import { User } from "lucide-react";
 
 export function Header() {
   return (
@@ -23,11 +23,7 @@ export function Header() {
         </div>
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/advisory" hasDropdown>For Farmers</NavLink>
-          <NavLink href="#">Weather</NavLink>
-          <NavLink href="#" hasDropdown>For Officers</NavLink>
-          <NavLink href="#">Resources</NavLink>
-          <NavLink href="#">Contact</NavLink>
+          <NavLink href="/advisory">For Farmers</NavLink>
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="hidden lg:flex">Officer Dashboard</Button>
@@ -43,9 +39,8 @@ export function Header() {
   );
 }
 
-const NavLink = ({ href, children, hasDropdown = false }: { href: string, children: React.ReactNode, hasDropdown?: boolean }) => (
+const NavLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
   <Link href={href} className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-1">
     {children}
-    {hasDropdown && <ChevronDown className="w-4 h-4" />}
   </Link>
 )
