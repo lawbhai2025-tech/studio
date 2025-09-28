@@ -20,15 +20,23 @@ import {
 import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/use-translation';
+
 
 export function Chatbot() {
-  const [messages, setMessages] = useState<ChatbotMessage[]>([
-    {
-      role: 'model',
-      content:
-        'Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?',
-    },
-  ]);
+  const { t, language } = useTranslation('chatbot');
+  const [messages, setMessages] = useState<ChatbotMessage[]>([]);
+  
+  useEffect(() => {
+    setMessages([
+      {
+        role: 'model',
+        content: t('initialMessage'),
+      },
+    ]);
+  }, [t]);
+
+
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -64,12 +72,12 @@ export function Chatbot() {
   const handleMicClick = () => {
     const recognition = new (window.SpeechRecognition ||
       window.webkitSpeechRecognition)();
-    recognition.lang = 'en-US';
+    recognition.lang = language === 'ml' ? 'ml-IN' : 'en-US';
     recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsRecording(true);
-      setTranscript('Listening...');
+      setTranscript(t('listening'));
     };
 
     recognition.onresult = event => {
@@ -114,7 +122,7 @@ export function Chatbot() {
     const currentPhotoDataUri = photoDataUri;
     
     if (!message && !currentPhotoDataUri) {
-        setError('Please enter a message or upload a photo.');
+        setError(t('error.noInput'));
         return;
     }
 
@@ -154,7 +162,7 @@ export function Chatbot() {
             });
         }
     } catch (e) {
-        setError('An unexpected error occurred. Please try again.');
+        setError(t('error.unexpected'));
     } finally {
         setIsPending(false);
     }
@@ -237,7 +245,7 @@ export function Chatbot() {
               name="message"
               ref={messageInputRef}
               placeholder={
-                isRecording ? transcript : 'Ask Krishi Dost anything...'
+                isRecording ? transcript : t('inputPlaceholder')
               }
               autoComplete="off"
               className="flex-1"
@@ -282,7 +290,7 @@ export function Chatbot() {
         {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>{t('error.title')}</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}

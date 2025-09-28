@@ -1,0 +1,96 @@
+
+{
+  "common": {
+    "appName": "Krishimitram",
+    "error": "Error",
+    "unexpectedError": "An unexpected error occurred. Please try again."
+  },
+  "header": {
+    "title": "Krishimitram",
+    "subtitle": "Kerala Agricultural Assistant",
+    "nav": {
+      "home": "Home",
+      "cropProtection": "Crop Protection",
+      "govSchemes": "Gov Schemes",
+      "chatbot": "Chatbot",
+      "weather": "Weather",
+      "profile": "Profile"
+    },
+    "downloadApp": "Download App"
+  },
+  "home": {
+    "topBar": {
+      "helpline": "24x7 Helpline: 1800 425 1661",
+      "helplineShort": "Helpline",
+      "location": "Kerala, India"
+    },
+    "hero": {
+      "badge": "Government of Kerala Initiative",
+      "title": "Bringing AI Power to <span class=\"text-green-600\">Farming</span>",
+      "subtitle": "Instant answers to all farming questions in Malayalam, 24x7 for Kerala farmers.",
+      "description": "Crop diseases, market prices, weather, pests - everything with AI assistance in Malayalam. SMS and call support for those without smartphones.",
+      "features": {
+        "voice": "Voice Chat in Malayalam",
+        "photo": "Photo Upload & Diagnosis",
+        "market": "Live Market Prices",
+        "weather": "Weather Alerts"
+      },
+      "cta": {
+        "start": "Start Talking Now",
+        "howItWorks": "See How It Works",
+        "download": "Download App"
+      },
+      "stats": {
+        "farmers": "Farmers",
+        "queries": "Queries",
+        "satisfaction": "Satisfaction",
+        "response": "Response"
+      }
+    },
+    "dashboard": {
+      "title": "Your Farming Dashboard",
+      "subtitle": "Live data to help you make informed decisions."
+    },
+    "chatPreview": {
+      "header": {
+        "title": "Krishimitram AI",
+        "subtitle": "Kerala Agriculture Dept."
+      },
+      "messages": [
+        { "role": "user", "time": "10:15", "content": "I am Raju from Kollam" },
+        { "role": "model", "time": "10:16", "content": "Spray Propiconazole immediately. Repeat every 15 days ♦️" },
+        { "role": "user", "time": "10:44", "content": "The leaves in my paddy field are turning yellow ☹️ What should I do?" },
+        { "type": "image" },
+        { "role": "model", "time": "10:47", "content": "Analyzing photo... 🔬 Nitrogen deficiency! Apply 50kg/acre of Urea fertilizer 🌱" },
+        { "role": "user", "time": "10:48", "content": "When should I apply it? 🤔" }
+      ],
+      "inputPlaceholder": "Type a message..."
+    }
+  },
+  "cropAdvice": {
+    "title": "Crop Disease Prediction",
+    "description": "Upload a picture of your crop, and our AI will analyze it to detect potential diseases and suggest remedies.",
+    "imageUploadPrompt": "Upload a clear image of the affected crop area",
+    "uploadImage": "Upload Image",
+    "changeImage": "Change Image",
+    "detailsPlaceholder": "Optionally, add more details like when you first noticed the issue, any recent changes in weather, etc.",
+    "getAdviceButton": "Get AI Advice",
+    "listening": "Listening...",
+    "error": {
+      "title": "Error"
+    },
+    "adviceCard": {
+      "title": "AI Generated Advice"
+    }
+  },
+  "chatbot": {
+    "initialMessage": "Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?",
+    "inputPlaceholder": "Ask Krishi Dost anything...",
+    "listening": "Listening...",
+    "error": {
+      "title": "Error",
+      "noInput": "Please enter a message or upload a photo.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
+  }
+}

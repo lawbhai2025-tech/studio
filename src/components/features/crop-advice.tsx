@@ -13,8 +13,10 @@ import { AlertCircle, Upload, Sparkles, Mic, Loader2, X } from 'lucide-react';
 import { Loader } from '../loader';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useTranslation } from '@/hooks/use-translation';
 
 export function CropAdvice() {
+  const { t, language } = useTranslation('cropAdvice');
   const [state, formAction, isPending] = useActionState(getCropAdvice, { advice: '', error: '' });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -38,12 +40,12 @@ export function CropAdvice() {
   
   const handleMicClick = () => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-US';
+    recognition.lang = language === 'ml' ? 'ml-IN' : 'en-US';
     recognition.interimResults = true;
 
     recognition.onstart = () => {
       setIsRecording(true);
-      setTranscript('Listening...');
+      setTranscript(t('listening'));
     };
 
     recognition.onresult = (event) => {
@@ -94,10 +96,8 @@ export function CropAdvice() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Crop Disease Prediction</CardTitle>
-        <CardDescription>
-          Upload a picture of your crop, and our AI will analyze it to detect potential diseases and suggest remedies.
-        </CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <form action={formAction} ref={formRef}>
         <CardContent className="space-y-4">
@@ -117,7 +117,7 @@ export function CropAdvice() {
                   </Button>
                 </>
               ) : (
-                <div className="text-center text-gray-500 space-y-2">
+                <div className="text-center text-gray-500 space-y-2 p-4">
                    {placeholderImage && (
                     <Image
                         src={placeholderImage.imageUrl}
@@ -128,7 +128,7 @@ export function CropAdvice() {
                         data-ai-hint={placeholderImage.imageHint}
                       />
                   )}
-                  <p>Upload a clear image of the affected crop area</p>
+                  <p>{t('imageUploadPrompt')}</p>
                 </div>
               )}
             </div>
@@ -144,7 +144,7 @@ export function CropAdvice() {
             />
             <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
               <Upload className="w-4 h-4 mr-2" />
-              {imagePreview ? 'Change Image' : 'Upload Image'}
+              {imagePreview ? t('changeImage') : t('uploadImage')}
             </Button>
           </div>
 
@@ -153,7 +153,7 @@ export function CropAdvice() {
               id="details"
               name="details"
               ref={detailsTextareaRef}
-              placeholder={isRecording ? transcript : "Optionally, add more details like when you first noticed the issue, any recent changes in weather, etc."}
+              placeholder={isRecording ? transcript : t('detailsPlaceholder')}
               className="pr-10"
             />
             <Button
@@ -169,7 +169,7 @@ export function CropAdvice() {
           {state?.error && (
              <Alert variant="destructive">
                <AlertCircle className="h-4 w-4" />
-               <AlertTitle>Error</AlertTitle>
+               <AlertTitle>{t('error.title')}</AlertTitle>
                <AlertDescription>{state.error}</AlertDescription>
              </Alert>
            )}
@@ -181,7 +181,7 @@ export function CropAdvice() {
             ) : (
               <>
                 <Sparkles className="w-4 h-4 mr-2" />
-                Get AI Advice
+                {t('getAdviceButton')}
               </>
             )}
           </Button>
@@ -193,7 +193,7 @@ export function CropAdvice() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-green-600" />
-              AI Generated Advice
+              {t('adviceCard.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
