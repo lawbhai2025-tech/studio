@@ -132,16 +132,6 @@ export function Chatbot() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    if (!formData.get('message') && !photoDataUri) {
-        // You can show a toast or an alert here
-        return;
-    }
-    formAction(formData);
-  }
-
   return (
     <div className="h-full flex flex-col p-4 md:p-6">
       <ScrollArea className="flex-1 mb-4 pr-4">
@@ -188,7 +178,6 @@ export function Chatbot() {
         <form
           ref={formRef}
           action={formAction}
-          onSubmit={handleSubmit}
           className="flex flex-col gap-2"
         >
           {imagePreview && (
