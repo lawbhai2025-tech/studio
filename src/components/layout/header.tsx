@@ -26,7 +26,7 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/advisory">AI Advisory</NavLink>
+          <NavLink href="/advisory">Crop Protection</NavLink>
           <NavLink href="/schemes">Gov Schemes</NavLink>
           <NavLink href="/chatbot">Chatbot</NavLink>
           <NavLink href="/weather">Weather</NavLink>
@@ -58,7 +58,7 @@ export function Header() {
                     <NavLink href="/">Home</NavLink>
                   </SheetClose>
                   <SheetClose asChild>
-                    <NavLink href="/advisory">AI Advisory</NavLink>
+                    <NavLink href="/advisory">Crop Protection</NavLink>
                   </SheetClose>
                   <SheetClose asChild>
                     <NavLink href="/schemes">Gov Schemes</NavLink>
