@@ -2,7 +2,8 @@
 import { Logo } from "@/components/icons/logo";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { User } from "lucide-react";
+import { User, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 export function Header() {
   return (
@@ -21,6 +22,8 @@ export function Header() {
             </div>
           </Link>
         </div>
+
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/advisory">AI Advisory</NavLink>
@@ -28,22 +31,68 @@ export function Header() {
           <NavLink href="/chatbot">Chatbot</NavLink>
           <NavLink href="/weather">Weather</NavLink>
         </nav>
+
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="hidden lg:flex">Officer Dashboard</Button>
-          <Link href="/profile">
-            <Button variant="ghost" size="icon">
-              <User />
-            </Button>
-          </Link>
-          <Button className="bg-green-600 hover:bg-green-700">Download App</Button>
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex items-center gap-2">
+            <Button variant="outline">Officer Dashboard</Button>
+            <Link href="/profile">
+              <Button variant="ghost" size="icon">
+                <User />
+              </Button>
+            </Link>
+            <Button className="bg-green-600 hover:bg-green-700">Download App</Button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4 mt-8">
+                  <SheetClose asChild>
+                    <NavLink href="/">Home</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <NavLink href="/advisory">AI Advisory</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <NavLink href="/advisory">Gov Schemes</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <NavLink href="/chatbot">Chatbot</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <NavLink href="/weather">Weather</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <NavLink href="/profile">Profile</NavLink>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button variant="outline" className="w-full justify-start">Officer Dashboard</Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button className="bg-green-600 hover:bg-green-700 w-full justify-start">Download App</Button>
+                  </SheetClose>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
   );
 }
 
-const NavLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-  <Link href={href} className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-1">
+const NavLink = ({ href, children, className }: { href: string, children: React.ReactNode, className?: string }) => (
+  <Link href={href} className={cn("px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 flex items-center gap-1", className)}>
     {children}
   </Link>
-)
+);
+
+import { cn } from "@/lib/utils";

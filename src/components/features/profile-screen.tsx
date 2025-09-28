@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -54,24 +55,25 @@ export function ProfileScreen() {
       {/* Profile Header */}
       <Card className="bg-gradient-to-r from-green-50 to-blue-50">
         <CardContent className="p-6">
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white font-bold text-2xl">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white font-bold text-2xl">
                 {farmerProfile.name.split(' ').map(n => n[0]).join('')}
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{farmerProfile.name}</h1>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{farmerProfile.name}</h1>
                 <p className="text-gray-600">{farmerProfile.location}</p>
-                <div className="flex gap-2 mt-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   <Badge className="bg-green-100 text-green-800">{farmerProfile.experience} Experience</Badge>
                   <Badge className="bg-blue-100 text-blue-800">{farmerProfile.farmSize}</Badge>
                 </div>
               </div>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right w-full sm:w-auto">
               <Button 
                 variant={editMode ? "default" : "outline"} 
                 onClick={() => setEditMode(!editMode)}
+                className="w-full sm:w-auto"
               >
                 {editMode ? "Save Profile" : "Edit Profile"}
               </Button>
@@ -82,7 +84,7 @@ export function ProfileScreen() {
       </Card>
 
       {/* Stats Overview */}
-      <div className="grid md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">{farmerProfile.totalQueries}</div>
@@ -112,7 +114,7 @@ export function ProfileScreen() {
       {/* Farm Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
             🌾 Farm Profile Memory
             <Badge className="bg-blue-100 text-blue-800 text-xs">AI Personalization</Badge>
           </CardTitle>
@@ -126,7 +128,7 @@ export function ProfileScreen() {
               </div>
               <div>
                 <Label>Primary Crops</Label>
-                <div className="flex gap-2 mt-1">
+                <div className="flex flex-wrap gap-2 mt-1">
                   {farmerProfile.crops.map((crop, index) => (
                     <Badge key={index} variant="outline">{crop}</Badge>
                   ))}
@@ -134,7 +136,7 @@ export function ProfileScreen() {
               </div>
               <div>
                 <Label>Languages</Label>
-                <div className="flex gap-2 mt-1">
+                <div className="flex flex-wrap gap-2 mt-1">
                   {farmerProfile.languages.map((lang, index) => (
                     <Badge key={index} className="bg-green-100 text-green-800">{lang}</Badge>
                   ))}
@@ -162,7 +164,7 @@ export function ProfileScreen() {
       {/* Crop History */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
             📊 Crop History & Performance
             <Badge variant="outline" className="text-xs">Stored for Personalization</Badge>
           </CardTitle>
@@ -170,9 +172,9 @@ export function ProfileScreen() {
         <CardContent>
           <div className="space-y-3">
             {farmHistory.map((record, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg gap-2">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center flex-wrap gap-2">
                     <h4 className="font-semibold">{record.season}</h4>
                     <Badge 
                       variant={record.status === 'Active' ? 'default' : 'outline'}
@@ -183,7 +185,7 @@ export function ProfileScreen() {
                   </div>
                   <p className="text-sm text-gray-600">{record.crop} - {record.variety} • {record.area}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right">
                   <p className="font-semibold">{record.yield}</p>
                   <p className="text-sm text-gray-600">Yield</p>
                 </div>
@@ -196,7 +198,7 @@ export function ProfileScreen() {
       {/* Achievements */}
       <Card>
         <CardHeader>
-          <CardTitle>🏆 Achievements</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl">🏆 Achievements</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">
@@ -216,7 +218,7 @@ export function ProfileScreen() {
       {/* Communication Preferences */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
             ⚙️ Communication Preferences
             <Badge className="bg-purple-100 text-purple-800 text-xs">Inclusive Access</Badge>
           </CardTitle>
@@ -224,7 +226,7 @@ export function ProfileScreen() {
         <CardContent className="space-y-6">
           <div>
             <h4 className="font-semibold mb-3">Preferred Communication Method</h4>
-            <div className="grid md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <Card className={`cursor-pointer ${preferences.communication === 'app' ? 'ring-2 ring-blue-500' : ''}`}>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl mb-2">📱</div>
@@ -268,9 +270,9 @@ export function ProfileScreen() {
       {/* Support & Help */}
       <Card>
         <CardHeader>
-          <CardTitle>🆘 Support & Help</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl">🆘 Support & Help</CardTitle>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-4">
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Button variant="outline" className="h-16 flex-col gap-1">
             <span className="text-xl">📞</span>
             <span>24×7 Helpline</span>

@@ -24,12 +24,13 @@ export default function Home() {
 const TopBar = () => (
   <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200">
     <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-10">
-      <div className="flex items-center gap-6 text-sm">
+      <div className="flex items-center gap-4 md:gap-6 text-sm">
         <div className="flex items-center gap-2 text-gray-600">
           <Phone className="w-4 h-4" />
-          <span>24x7 Helpline: 1800 425 1661</span>
+          <span className="hidden md:inline">24x7 Helpline: 1800 425 1661</span>
+          <span className="md:hidden">Helpline</span>
         </div>
-        <div className="flex items-center gap-2 text-gray-600">
+        <div className="hidden md:flex items-center gap-2 text-gray-600">
           <MapPin className="w-4 h-4" />
           <span>Kerala, India</span>
         </div>
@@ -37,7 +38,7 @@ const TopBar = () => (
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" className="flex items-center gap-1">
           <Image src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Kerala.svg" alt="Kerala government logo" width={16} height={16} />
-           Govt. of Kerala
+           <span className="hidden sm:inline">Govt. of Kerala</span>
         </Button>
       </div>
     </div>
@@ -46,51 +47,54 @@ const TopBar = () => (
 
 
 const HeroSection = () => (
-  <section className="relative max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+  <section className="relative max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
     <div className="grid md:grid-cols-2 gap-12 items-center">
-      <div className="space-y-6">
+      <div className="space-y-6 text-center md:text-left">
         <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
           Government of Kerala Initiative
         </Badge>
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900">
           Bringing AI Power to <span className="text-green-600">Farming</span>
         </h1>
         <p className="text-lg text-gray-600">
           Instant answers to all farming questions in Malayalam, 24x7 for Kerala farmers.
         </p>
-        <p className="text-gray-500">
+        <p className="text-gray-500 max-w-xl mx-auto md:mx-0">
           Crop diseases, market prices, weather, pests - everything with AI assistance in Malayalam. SMS and call support for those without smartphones.
         </p>
         
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-2 gap-4 text-sm max-w-md mx-auto md:mx-0">
           <FeatureCard icon={<Mic className="text-purple-600" />} text="Voice Chat in Malayalam" />
           <FeatureCard icon={<Camera className="text-orange-600" />} text="Photo Upload & Diagnosis" />
           <FeatureCard icon={<LineChart className="text-blue-600" />} text="Live Market Prices" />
           <FeatureCard icon={<Bell className="text-red-600" />} text="Weather Alerts" />
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4">
           <Link href="/chatbot">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white shadow-lg">
+            <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white shadow-lg w-full sm:w-auto">
               Start Talking Now <ArrowRight className="ml-2" />
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="bg-white hover:bg-gray-50 shadow-lg">
+          <Button size="lg" variant="outline" className="bg-white hover:bg-gray-50 shadow-lg w-full sm:w-auto">
             See How It Works <PlayCircle className="ml-2" />
           </Button>
-          <Button variant="link" className="text-amber-600 hover:text-amber-700">
-            Download App
-          </Button>
+        </div>
+        <div className="text-center md:text-left pt-2">
+            <Button variant="link" className="text-amber-600 hover:text-amber-700">
+                Download App
+            </Button>
         </div>
 
-        <div className="flex items-center gap-8 pt-6">
-          <Stat value="50,000+" label="Farmers" />
-          <Stat value="2" label="Lakh+ Queries" />
+
+        <div className="flex items-center justify-center md:justify-start gap-4 sm:gap-8 pt-6">
+          <Stat value="50k+" label="Farmers" />
+          <Stat value="2L+" label="Queries" />
           <Stat value="95%" label="Satisfaction" />
-          <Stat value="<30" label="Seconds" />
+          <Stat value="<30s" label="Response" />
         </div>
       </div>
-      <div className="relative">
+      <div className="relative hidden md:block">
          <div className="absolute -inset-2 bg-gradient-to-br from-green-200 via-emerald-200 to-yellow-100 rounded-full opacity-50 blur-2xl"></div>
         <ChatPreview />
       </div>
@@ -126,8 +130,8 @@ const FeatureCard = ({ icon, text }: { icon: React.ReactNode, text: string }) =>
 
 const Stat = ({ value, label }: { value: string, label: string }) => (
   <div className="text-center">
-    <p className="text-2xl font-bold text-green-600">{value}</p>
-    <p className="text-sm text-gray-500 uppercase tracking-wider">{label}</p>
+    <p className="text-xl sm:text-2xl font-bold text-green-600">{value}</p>
+    <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">{label}</p>
   </div>
 );
 

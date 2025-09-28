@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -160,7 +161,7 @@ export function Chatbot() {
   }
 
   return (
-    <div className="h-full flex flex-col p-4 md:p-6">
+    <div className="h-full flex flex-col p-2 sm:p-4 md:p-6">
       <ScrollArea className="flex-1 mb-4 pr-4">
         <div className="space-y-6">
           {messages.map((message, index) => (
@@ -186,7 +187,7 @@ export function Chatbot() {
                     : 'bg-muted'
                 )}
               >
-                <p className="text-sm">{message.content}</p>
+                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                  {message.role === 'model' && index === messages.length - 1 && isPending && (
                   <Loader2 className="h-4 w-4 animate-spin inline-block ml-2" />
                 )}
