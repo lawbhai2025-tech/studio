@@ -1,3 +1,133 @@
+
+export type Scheme = {
+  name: string;
+  purpose: string;
+  category: string;
+};
+
+export const schemesData: Scheme[] = [
+  {
+    name: 'Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)',
+    purpose: 'A central sector scheme to supplement financial needs of land holding farmers. Financial benefit of Rs. 6000/- per year is transferred in three equal four-monthly installments.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Pradhan Mantri Kisan MaanDhan Yojana (PM-KMY)',
+    purpose: 'A contributory pension scheme for small and marginal farmers to provide security in old age, offering a Rs. 3,000 monthly pension after 60 years of age.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Pradhan Mantri Fasal Bima Yojana (PMFBY)',
+    purpose: 'An affordable crop insurance product to ensure comprehensive risk cover for crops against all non-preventable natural risks from pre-sowing to post-harvest.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Modified Interest Subvention Scheme (MISS)',
+    purpose: 'Provides concessional short-term agri-loans up to Rs. 3.00 lakh at a reduced interest rate for farmers practicing crop husbandry and allied activities.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Agriculture Infrastructure Fund (AIF)',
+    purpose: 'A medium-long term debt financing facility for investment in post-harvest management infrastructure and community farming assets with interest subvention and credit guarantee.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Formation & Promotion of new 10,000 FPOs',
+    purpose: 'A scheme to form and promote 10,000 Farmer Producer Organizations (FPOs) with financial assistance and professional handholding support for 5 years.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'National Beekeeping and Honey Mission (NBHM)',
+    purpose: 'For overall promotion and development of scientific beekeeping to achieve the goal of “Sweet Revolution” under the Atma Nirbhar Bharat Abhiyan.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Market Intervention Scheme and Price support Scheme (MIS-PSS)',
+    purpose: 'To protect growers of perishable agricultural and horticultural commodities from making distress sales in the event of a bumper crop and price drops.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Namo Drone Didi',
+    purpose: 'Provides drones to Women Self Help Groups (SHGs) for offering rental services to farmers for agricultural purposes like fertilizer and pesticide application.',
+    category: 'Central Sector Scheme'
+  },
+  {
+    name: 'Rastriya Krishi Vikas Yojana (RKVY-DPR)',
+    purpose: 'Focuses on creating pre & post-harvest infrastructure, providing flexibility to states to implement projects based on local farmers’ needs.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Soil Health Card (SHC)',
+    purpose: 'Provides farmers with information on the nutrient status of their soil along with recommendations on the appropriate dosage of nutrients to improve soil health.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Rainfed Area Development (RAD)',
+    purpose: 'Promotes Integrated Farming System (IFS) in rainfed areas to maximize farm returns and mitigate the impacts of drought, flood, or other extreme weather.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Per Drop More Crop (PDMC)',
+    purpose: 'Increases water use efficiency at the farm level through micro-irrigation technologies like drip and sprinkler irrigation systems.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Paramparagat Krishi Vikas Yojana (PKVY)',
+    purpose: 'Aims to increase soil fertility and promote organic farming practices without the use of agro-chemicals, implemented in a cluster mode.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Sub-Mission on Agriculture Mechanization (SMAM)',
+    purpose: 'Increases the reach of farm mechanization to small and marginal farmers and promotes Custom Hiring Centres to offset the adverse economies of scale.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Crop Residue Management',
+    purpose: 'Promotes in-situ management of crop residue to protect the environment from air pollution and prevent nutrient loss caused by burning crop residue.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Agro-forestry',
+    purpose: 'Promotes the plantation of trees on farmland to improve the livelihood of farmers, based on the National Agro-forestry Policy 2014.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'National Food Security Mission (NFSM)',
+    purpose: 'Aims at increasing the production of rice, wheat, pulses, and coarse cereals through area expansion and productivity enhancement in a sustainable manner.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'National Mission on Edible Oils (NMEO)-Oil Palm',
+    purpose: 'Promotes oil palm cultivation to make the country self-reliant in edible oils, with a special focus on North-Eastern States and A&N Islands.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Mission for Integrated Development of Horticulture (MIDH)',
+    purpose: 'For the holistic growth of the horticulture sector, covering fruits, vegetables, spices, flowers, and other related crops.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Integrated Scheme for Agriculture Marketing (ISAM)',
+    purpose: 'Supports state governments in governing agricultural produce marketing by creating market structures and improving access to market information, including the e-NAM platform.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Mission Organic Value Chain Development for North Eastern Region',
+    purpose: 'Develops certified organic production clusters in a value chain mode to link growers with consumers in the Northeast Region.',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Sub-Mission on Agriculture Extension (SMAE)',
+    purpose: 'Aims to make the extension system farmer-driven and accountable by disseminating technology through Agricultural Technology Management Agency (ATMA).',
+    category: 'Centrally Sponsored Scheme'
+  },
+  {
+    name: 'Digital Agriculture',
+    purpose: 'Aims to improve e-Governance in agriculture by developing a digital public infrastructure for farmer-centric solutions and information services.',
+    category: 'Centrally Sponsored Scheme'
+  }
+];
+
 export const schemes = `
 Schemes for Welfare of Farmers
 Posted On: 02 FEB 2024 6:48PM by PIB Delhi
