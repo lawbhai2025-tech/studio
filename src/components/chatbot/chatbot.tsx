@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { streamChat, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
+import { getStreamingChatbotResponse, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -19,18 +19,6 @@ import {
 import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { cn } from '@/lib/utils';
-import { Loader } from '../loader';
-import { useFormStatus } from 'react-dom';
-
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" size="icon" disabled={pending}>
-      {pending ? <Loader /> : <Send />}
-    </Button>
-  );
-}
 
 export function Chatbot() {
   const [messages, setMessages] = useState<ChatbotMessage[]>([
@@ -156,11 +144,10 @@ export function Chatbot() {
     const newHistory: ChatbotMessage[] = [...messages, { role: 'user', content: message }];
     setMessages(newHistory);
     
-    // Add a placeholder for the streaming response
     setMessages(prev => [...prev, { role: 'model', content: '' }]);
 
     try {
-        const stream = await streamChat(newHistory, currentPhotoDataUri);
+        const stream = await getStreamingChatbotResponse({ history: newHistory, photoDataUri: currentPhotoDataUri });
         const reader = stream.getReader();
         const decoder = new TextDecoder();
         

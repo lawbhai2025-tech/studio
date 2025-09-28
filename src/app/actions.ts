@@ -96,15 +96,6 @@ const chatbotSchema = z.object({
   photoDataUri: z.string().optional(),
 });
 
-export async function streamChat(
-  history: ChatbotMessage[],
-  photoDataUri?: string
-) {
-  const result = await getStreamingChatbotResponse({ history, photoDataUri });
-  return result;
-}
-
-
 export async function getChatbotResponseAction(
   prevState: ChatbotState,
   formData: FormData
