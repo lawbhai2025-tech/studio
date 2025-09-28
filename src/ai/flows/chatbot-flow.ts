@@ -24,6 +24,13 @@ export type {
   ChatbotOutput,
 } from '@/ai/schemas/chatbot-schemas';
 
+const fixedResponses: Record<string, string> = {
+  "what are the key features of this app?": "Krishi Sahayak offers AI-powered crop advice, personalized government scheme recommendations, daily Mandi prices, and weather advisories to help you make informed farming decisions.",
+  "how do i get crop advice?": "You can get crop advice by navigating to the 'AI Advisory' section on the dashboard, selecting the 'Crop Advice' tab, and uploading a picture of your crop. Our AI will analyze it and provide recommendations.",
+  "can you tell me about government schemes?": "Yes, under the 'AI Advisory' section, go to the 'Scheme Recommendations' tab. Describe your farm and needs, and our AI will suggest relevant government schemes for you.",
+  "where can i see the market prices?": "The daily Mandi prices for major crops in your local market are displayed on the main dashboard in the 'Daily Mandi Prices' card."
+};
+
 export async function getChatbotResponse(
   input: ChatbotInput
 ): Promise<ChatbotOutput> {
@@ -63,6 +70,15 @@ const chatbotFlow = ai.defineFlow(
     outputSchema: ChatbotOutputSchema,
   },
   async input => {
+    const lastUserMessage = input.history[input.history.length - 1];
+
+    if (lastUserMessage && lastUserMessage.role === 'user') {
+      const userQuestion = lastUserMessage.content.toLowerCase().trim();
+      if (fixedResponses[userQuestion]) {
+        return { response: fixedResponses[userQuestion] };
+      }
+    }
+    
     const {output} = await prompt(input);
     return output!;
   }
