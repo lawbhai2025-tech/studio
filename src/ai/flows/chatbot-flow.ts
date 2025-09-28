@@ -9,13 +9,24 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { ChatbotInputSchema, ChatbotOutputSchema } from '@/ai/schemas/chatbot-schemas';
-import type { ChatbotInput, ChatbotOutput } from '@/ai/schemas/chatbot-schemas';
+import {
+  ChatbotInputSchema,
+  ChatbotOutputSchema,
+} from '@/ai/schemas/chatbot-schemas';
+import type {
+  ChatbotInput,
+  ChatbotOutput,
+} from '@/ai/schemas/chatbot-schemas';
 
-export type { ChatbotMessage, ChatbotInput, ChatbotOutput } from '@/ai/schemas/chatbot-schemas';
+export type {
+  ChatbotMessage,
+  ChatbotInput,
+  ChatbotOutput,
+} from '@/ai/schemas/chatbot-schemas';
 
-
-export async function getChatbotResponse(input: ChatbotInput): Promise<ChatbotOutput> {
+export async function getChatbotResponse(
+  input: ChatbotInput
+): Promise<ChatbotOutput> {
   return chatbotFlow(input);
 }
 
@@ -27,6 +38,11 @@ const prompt = ai.definePrompt({
 
   Your role is to answer questions from farmers about agriculture, farming techniques, crop management, government schemes, and market prices.
 
+  {{#if photoDataUri}}
+  The user has provided an image. Analyze the image and use it as the primary context for your response. If the user's message is related to the image, provide a detailed analysis. If the message is not related, you can acknowledge the image and answer the question.
+  Image: {{media url=photoDataUri}}
+  {{/if}}
+
   Here is the conversation history:
   {{#each history}}
   {{#if (eq role 'user')}}
@@ -36,7 +52,7 @@ const prompt = ai.definePrompt({
   Krishi Dost: {{{content}}}
   {{/if}}
   {{/each}}
-  
+
   Please provide a helpful and concise response to the last user message.`,
 });
 

@@ -1,14 +1,24 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
+import Image from 'next/image';
 import { getChatbotResponseAction, type ChatbotState } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, Bot, Send, User, Sparkles } from 'lucide-react';
+import {
+  AlertCircle,
+  Bot,
+  Send,
+  User,
+  Paperclip,
+  Mic,
+  X,
+  Loader2,
+} from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 import { cn } from '@/lib/utils';
 import { Loader } from '../loader';
 
@@ -26,6 +36,12 @@ export function Chatbot() {
   const [state, formAction] = useFormState(getChatbotResponseAction, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [photoDataUri, setPhotoDataUri] = useState<string>('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState('');
+  const messageInputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -33,10 +49,74 @@ export function Chatbot() {
 
   useEffect(() => {
     scrollToBottom();
-    if (!state.error) {
-      formRef.current?.reset();
+    if (!state.error && formRef.current) {
+      formRef.current.reset();
+      setImagePreview(null);
+      setPhotoDataUri('');
+      setTranscript('');
     }
   }, [state]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        setPhotoDataUri(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMicClick = () => {
+    const recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      setTranscript('Listening...');
+    };
+
+    recognition.onresult = event => {
+      const currentTranscript = Array.from(event.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+      setTranscript(currentTranscript);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+      if (messageInputRef.current && transcript !== 'Listening...') {
+        messageInputRef.current.value = transcript;
+      }
+      setTranscript(''); // Clear after setting input
+    };
+
+    recognition.onerror = event => {
+      console.error('Speech recognition error', event.error);
+      setIsRecording(false);
+      setTranscript('');
+    };
+
+    if (isRecording) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+  };
+
+  const clearImage = () => {
+    setImagePreview(null);
+    setPhotoDataUri('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className="h-full flex flex-col p-4 md:p-6">
@@ -84,21 +164,77 @@ export function Chatbot() {
         <form
           ref={formRef}
           action={formAction}
-          className="flex items-center gap-2"
+          className="flex flex-col gap-2"
         >
-          <Input
-            id="message"
-            name="message"
-            placeholder="Ask Krishi Dost anything..."
-            required
-            autoComplete="off"
-          />
-          <input
-            type="hidden"
-            name="history"
-            value={JSON.stringify(state.messages)}
-          />
-          <SubmitButton />
+          {imagePreview && (
+            <div className="relative w-32 h-32 rounded-md overflow-hidden border">
+              <Image
+                src={imagePreview}
+                alt="Image preview"
+                fill
+                className="object-cover"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute top-1 right-1 h-6 w-6 bg-black/50 hover:bg-black/75 text-white"
+                onClick={clearImage}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <Input
+              id="message"
+              name="message"
+              ref={messageInputRef}
+              placeholder={
+                isRecording ? transcript : 'Ask Krishi Dost anything...'
+              }
+              autoComplete="off"
+              className="flex-1"
+            />
+            <input
+              type="hidden"
+              name="history"
+              value={JSON.stringify(state.messages)}
+            />
+            <input
+              type="hidden"
+              name="photoDataUri"
+              value={photoDataUri}
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              className="hidden"
+              accept="image/*"
+            />
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Paperclip />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={handleMicClick}
+              className={cn(isRecording && 'bg-red-500/20 text-red-500')}
+            >
+              {isRecording ? <Loader2 className="animate-spin" /> : <Mic />}
+            </Button>
+
+            <SubmitButton />
+          </div>
         </form>
 
         {state.error && (

@@ -91,8 +91,9 @@ export interface ChatbotState {
 }
 
 const chatbotSchema = z.object({
-  message: z.string().min(1, 'Message is required.'),
+  message: z.string(),
   history: z.string(),
+  photoDataUri: z.string().optional(),
 });
 
 export async function getChatbotResponseAction(
@@ -103,6 +104,7 @@ export async function getChatbotResponseAction(
     const validatedFields = chatbotSchema.safeParse({
       message: formData.get('message'),
       history: formData.get('history'),
+      photoDataUri: formData.get('photoDataUri'),
     });
 
     if (!validatedFields.success) {
@@ -113,12 +115,21 @@ export async function getChatbotResponseAction(
       };
     }
 
-    const { message, history: historyJSON } = validatedFields.data;
+    const { message, history: historyJSON, photoDataUri } = validatedFields.data;
+
+    if (!message && !photoDataUri) {
+      return {
+        messages: JSON.parse(historyJSON),
+        error: 'Please enter a message or upload a photo.',
+      };
+    }
+
+
     const history = JSON.parse(historyJSON) as ChatbotMessage[];
     const newMessage: ChatbotMessage = { role: 'user', content: message };
     const newHistory: ChatbotMessage[] = [...history, newMessage];
 
-    const result = await getChatbotResponse({ history: newHistory });
+    const result = await getChatbotResponse({ history: newHistory, photoDataUri });
 
     const responseMessage: ChatbotMessage = { role: 'model', content: result.response };
 
