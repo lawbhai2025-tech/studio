@@ -1,9 +1,7 @@
 
 import { CropAdvice } from "@/components/features/crop-advice";
-import { SchemeRecommendations } from "@/components/features/scheme-recommendations";
 import { Header } from "@/components/layout/header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Leaf, Award } from "lucide-react";
+import { Leaf } from "lucide-react";
 
 export default function AdvisoryPage() {
   return (
@@ -14,31 +12,13 @@ export default function AdvisoryPage() {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
-                AI Advisory
+                Crop Protection
               </h1>
               <p className="mt-2 text-lg text-gray-600">
-                Get instant, personalized advice powered by AI.
+                Get instant, AI-powered advice to protect your crops.
               </p>
             </div>
-
-            <Tabs defaultValue="crop-advice" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="crop-advice">
-                  <Leaf className="w-4 h-4 mr-2" />
-                  Crop Disease Prediction
-                </TabsTrigger>
-                <TabsTrigger value="scheme-recommendations">
-                  <Award className="w-4 h-4 mr-2" />
-                  Scheme Recommendations
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="crop-advice">
-                <CropAdvice />
-              </TabsContent>
-              <TabsContent value="scheme-recommendations">
-                <SchemeRecommendations />
-              </TabsContent>
-            </Tabs>
+            <CropAdvice />
           </div>
         </div>
       </main>

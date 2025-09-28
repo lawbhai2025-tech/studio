@@ -7,6 +7,7 @@ import { Phone, MapPin, Mic, Camera, LineChart, Bell, ArrowRight, ChevronRight, 
 import Link from "next/link";
 import { WeatherCard } from "@/components/features/weather-card";
 import { MandiPrices } from "@/components/features/mandi-prices";
+import { Paperclip, Send } from "lucide-react";
 
 export default function Home() {
   return (
@@ -195,4 +196,3 @@ const ChatMessage = ({ role, time, children }: { role: 'user' | 'model', time: s
     </div>
   );
 };
-import { Paperclip, Send } from "lucide-react";
