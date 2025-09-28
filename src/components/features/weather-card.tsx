@@ -12,8 +12,13 @@ export function WeatherCard({ className = "" }) {
   const weatherConditions = ['sunny', 'cloudy', 'rain', 'storm'];
 
   useEffect(() => {
+    // This code will only run on the client, after the component has mounted.
+    // This prevents hydration mismatch errors.
+    
+    // Start with sunny weather
     setCurrentWeather('sunny');
     
+    // Cycle through all weather conditions every 5 seconds for demo
     const weatherInterval = setInterval(() => {
       setCurrentWeather(prevWeather => {
         const currentIndex = weatherConditions.indexOf(prevWeather);
@@ -22,6 +27,7 @@ export function WeatherCard({ className = "" }) {
       });
     }, 5000);
 
+    // Update time every minute
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -30,7 +36,7 @@ export function WeatherCard({ className = "" }) {
       clearInterval(weatherInterval);
       clearInterval(timeInterval);
     };
-  }, []);
+  }, []); // Empty dependency array means this effect runs only once on the client.
 
   const getWeatherData = () => {
     const hour = currentTime.getHours();
@@ -38,6 +44,8 @@ export function WeatherCard({ className = "" }) {
     const isRainySeason = month >= 5 && month <= 9;
     
     const getRealisticTemp = (baseTemp) => {
+      // Math.random() can cause hydration issues if run on both server and client.
+      // Since this whole function is now effectively client-side due to the useEffect, it's safe.
       const hourVariation = Math.sin(((hour - 6) * Math.PI) / 12) * 5;
       const randomVariation = (Math.random() - 0.5) * 4;
       return Math.round(baseTemp + hourVariation + randomVariation);
