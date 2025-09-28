@@ -28,15 +28,16 @@ export function AllSchemes() {
       <div className="flex flex-col md:flex-row items-center gap-4">
         <Input
           placeholder="Search for schemes..."
-          className="flex-1"
+          className="w-full md:flex-1"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">Filter by category:</span>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <span className="text-sm font-medium hidden sm:inline">Filter:</span>
           {categories.map(category => (
             <Button
               key={category}
               variant={selectedCategory === category ? 'default' : 'outline'}
+              size="sm"
               onClick={() => setSelectedCategory(category)}
             >
               {category}
