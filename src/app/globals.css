@@ -82,3 +82,64 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes rain {
+    0% { transform: translateY(-100px); opacity: 0; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  @keyframes rain-splash {
+    0% { transform: scaleX(0); opacity: 1; }
+    80% { transform: scaleX(1); opacity: 0; }
+    100% { opacity: 0; }
+  }
+  @keyframes cloud-move {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(120%); }
+  }
+  @keyframes cloud-move-slow {
+    0% { transform: translateX(-150%); }
+    100% { transform: translateX(150%); }
+  }
+  @keyframes cloud-move-reverse {
+    0% { transform: translateX(120%); }
+    100% { transform: translateX(-120%); }
+  }
+  @keyframes pulse-slow {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+  }
+  @keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  @keyframes heat-shimmer {
+    0%, 100% { transform: skewX(0); opacity: 0; }
+    50% { transform: skewX(2deg); opacity: 1; }
+  }
+  @keyframes lightning {
+    0%, 100% { opacity: 0; }
+    5%, 50% { opacity: 1; }
+    6%, 51% { opacity: 0; }
+  }
+  @keyframes heavy-rain {
+    0% { transform: translateY(-100px) skew(-15deg); opacity: 0; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh) skew(-15deg); opacity: 0; }
+  }
+  @keyframes wind-gust {
+    0% { transform: translateX(-100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+  @keyframes snow {
+    0% { transform: translateY(-100px); opacity: 0; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+}
