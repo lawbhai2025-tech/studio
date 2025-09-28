@@ -35,7 +35,6 @@ export function Header() {
         <div className="flex items-center gap-2">
           {/* Desktop Buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="outline">Officer Dashboard</Button>
             <Link href="/profile">
               <Button variant="ghost" size="icon">
                 <User />
@@ -72,9 +71,6 @@ export function Header() {
                   </SheetClose>
                   <SheetClose asChild>
                     <NavLink href="/profile">Profile</NavLink>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Button variant="outline" className="w-full justify-start">Officer Dashboard</Button>
                   </SheetClose>
                   <SheetClose asChild>
                     <Button className="bg-green-600 hover:bg-green-700 w-full justify-start">Download App</Button>
