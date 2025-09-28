@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { getChatbotResponseAction, type ChatbotState } from '@/app/actions';
+import { streamChat, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -21,6 +20,8 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { cn } from '@/lib/utils';
 import { Loader } from '../loader';
+import { useFormStatus } from 'react-dom';
+
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -32,33 +33,33 @@ function SubmitButton() {
 }
 
 export function Chatbot() {
-  const initialState: ChatbotState = {
-    messages: [
-      {
-        role: 'model',
-        content:
-          'Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?',
-      },
-      {
-        role: 'user',
-        content: 'What is the best fertilizer for wheat crops?',
-      },
-      {
-        role: 'model',
-        content:
-          'For wheat, a balanced NPK fertilizer is recommended. For specific dosages, could you please tell me about your soil type and location?',
-      },
-      {
-        role: 'user',
-        content: 'My farm is in Punjab and the soil is loamy.',
-      },
-      {
-        role: 'model',
-        content: 'Thank you. For loamy soil in Punjab, a good starting point for wheat is an NPK ratio of 120:60:40 kg/ha. It\'s always best to get a soil test for precise recommendations.',
-      }
-    ],
-  };
-  const [state, formAction] = useActionState(getChatbotResponseAction, initialState);
+  const [messages, setMessages] = useState<ChatbotMessage[]>([
+    {
+      role: 'model',
+      content:
+        'Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?',
+    },
+    {
+      role: 'user',
+      content: 'What is the best fertilizer for wheat crops?',
+    },
+    {
+      role: 'model',
+      content:
+        'For wheat, a balanced NPK fertilizer is recommended. For specific dosages, could you please tell me about your soil type and location?',
+    },
+    {
+      role: 'user',
+      content: 'My farm is in Punjab and the soil is loamy.',
+    },
+    {
+      role: 'model',
+      content:
+        'Thank you. For loamy soil in Punjab, a good starting point for wheat is an NPK ratio of 120:60:40 kg/ha. It\'s always best to get a soil test for precise recommendations.',
+    },
+  ]);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,16 +75,7 @@ export function Chatbot() {
 
   useEffect(() => {
     scrollToBottom();
-    if (!state.error && formRef.current) {
-      formRef.current.reset();
-      setImagePreview(null);
-      setPhotoDataUri('');
-      setTranscript('');
-      if (messageInputRef.current) {
-        messageInputRef.current.value = '';
-      }
-    }
-  }, [state]);
+  }, [messages]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -122,10 +114,7 @@ export function Chatbot() {
 
     recognition.onend = () => {
       setIsRecording(false);
-      if (messageInputRef.current && transcript !== 'Listening...') {
-        // The transcript is already in the input field from onresult
-      }
-      setTranscript(''); // Clear after setting input
+      setTranscript('');
     };
 
     recognition.onerror = event => {
@@ -149,11 +138,63 @@ export function Chatbot() {
     }
   };
 
+  async function handleSubmit(formData: FormData) {
+    const message = formData.get('message') as string;
+    const currentPhotoDataUri = photoDataUri;
+    
+    if (!message && !currentPhotoDataUri) {
+        setError('Please enter a message or upload a photo.');
+        return;
+    }
+
+    setIsPending(true);
+    setError(null);
+    formRef.current?.reset();
+    setImagePreview(null);
+    setPhotoDataUri('');
+
+    const newHistory: ChatbotMessage[] = [...messages, { role: 'user', content: message }];
+    setMessages(newHistory);
+    
+    // Add a placeholder for the streaming response
+    setMessages(prev => [...prev, { role: 'model', content: '' }]);
+
+    try {
+        const stream = await streamChat(newHistory, currentPhotoDataUri);
+        const reader = stream.getReader();
+        const decoder = new TextDecoder();
+        
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value, { stream: true });
+            
+            setMessages(prev => {
+                const lastMessage = prev[prev.length - 1];
+                if (lastMessage.role === 'model') {
+                    const updatedMessages = [...prev];
+                    updatedMessages[prev.length - 1] = {
+                        ...lastMessage,
+                        content: lastMessage.content + chunk
+                    };
+                    return updatedMessages;
+                }
+                return prev;
+            });
+        }
+    } catch (e) {
+        setError('An unexpected error occurred. Please try again.');
+    } finally {
+        setIsPending(false);
+    }
+  }
+
   return (
     <div className="h-full flex flex-col p-4 md:p-6">
       <ScrollArea className="flex-1 mb-4 pr-4">
         <div className="space-y-6">
-          {state.messages.map((message, index) => (
+          {messages.map((message, index) => (
             <div
               key={index}
               className={cn(
@@ -177,6 +218,9 @@ export function Chatbot() {
                 )}
               >
                 <p className="text-sm">{message.content}</p>
+                 {message.role === 'model' && index === messages.length - 1 && isPending && (
+                  <Loader2 className="h-4 w-4 animate-spin inline-block ml-2" />
+                )}
               </div>
               {message.role === 'user' && (
                 <Avatar className="w-8 h-8">
@@ -194,7 +238,7 @@ export function Chatbot() {
       <div className="space-y-4">
         <form
           ref={formRef}
-          action={formAction}
+          action={handleSubmit}
           className="flex flex-col gap-2"
         >
           {imagePreview && (
@@ -227,23 +271,16 @@ export function Chatbot() {
               }
               autoComplete="off"
               className="flex-1"
+              disabled={isPending}
             />
-            <input
-              type="hidden"
-              name="history"
-              value={JSON.stringify(state.messages)}
-            />
-            <input
-              type="hidden"
-              name="photoDataUri"
-              value={photoDataUri}
-            />
+            
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleImageChange}
               className="hidden"
               accept="image/*"
+              disabled={isPending}
             />
 
             <Button
@@ -251,6 +288,7 @@ export function Chatbot() {
               variant="ghost"
               size="icon"
               onClick={() => fileInputRef.current?.click()}
+               disabled={isPending}
             >
               <Paperclip />
             </Button>
@@ -260,19 +298,22 @@ export function Chatbot() {
               size="icon"
               onClick={handleMicClick}
               className={cn(isRecording && 'bg-red-500/20 text-red-500')}
+               disabled={isPending}
             >
               {isRecording ? <Loader2 className="animate-spin" /> : <Mic />}
             </Button>
 
-            <SubmitButton />
+            <Button type="submit" size="icon" disabled={isPending}>
+                {isPending ? <Loader2 className="animate-spin" /> : <Send />}
+            </Button>
           </div>
         </form>
 
-        {state.error && (
+        {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{state.error}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
       </div>

@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import { getCropAdviceFromImage } from '@/ai/flows/crop-advice-from-image';
 import { personalizedSchemeRecommendations } from '@/ai/flows/personalized-scheme-recommendations';
-import { getChatbotResponse, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
+import { getChatbotResponse, getStreamingChatbotResponse, type ChatbotMessage } from '@/ai/flows/chatbot-flow';
 
 export interface CropAdviceState {
   advice?: string;
@@ -95,6 +95,15 @@ const chatbotSchema = z.object({
   history: z.string(),
   photoDataUri: z.string().optional(),
 });
+
+export async function streamChat(
+  history: ChatbotMessage[],
+  photoDataUri?: string
+) {
+  const result = await getStreamingChatbotResponse({ history, photoDataUri });
+  return result;
+}
+
 
 export async function getChatbotResponseAction(
   prevState: ChatbotState,

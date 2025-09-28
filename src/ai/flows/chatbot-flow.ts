@@ -3,6 +3,7 @@
  * @fileOverview A chatbot flow for Krishi Sahayak.
  *
  * - getChatbotResponse - A function that returns a response from the chatbot.
+ * - getStreamingChatbotResponse - A function that returns a streaming response from the chatbot.
  * - ChatbotInput - The input type for the getChatbotResponse function.
  * - ChatbotOutput - The return type for the getChatbotResponse function.
  */
@@ -37,9 +38,51 @@ export async function getChatbotResponse(
   return chatbotFlow(input);
 }
 
-const prompt = ai.definePrompt({
+
+export async function getStreamingChatbotResponse(
+  input: ChatbotInput
+) {
+  const lastUserMessage = input.history[input.history.length - 1];
+
+  if (lastUserMessage && lastUserMessage.role === 'user') {
+    const userQuestion = lastUserMessage.content.toLowerCase().trim();
+    if (fixedResponses[userQuestion]) {
+      const stream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(fixedResponses[userQuestion]);
+          controller.close();
+        },
+      });
+      return stream;
+    }
+  }
+
+  const {stream, response} = ai.generateStream({
+    model: 'googleai/gemini-2.5-flash',
+    prompt: chatbotPrompt.prompt,
+    history: input.history,
+    input: {
+      photoDataUri: input.photoDataUri,
+    }
+  });
+
+  const textStream = new ReadableStream({
+    async start(controller) {
+      for await (const chunk of stream) {
+        controller.enqueue(chunk.text);
+      }
+      controller.close();
+    },
+  });
+
+  return textStream;
+}
+
+const chatbotPrompt = ai.definePrompt({
   name: 'chatbotPrompt',
-  input: {schema: ChatbotInputSchema},
+  input: {schema: z.object({
+    photoDataUri: z.string().optional(),
+  })},
   output: {schema: ChatbotOutputSchema},
   prompt: `You are a friendly and helpful chatbot for Krishi Sahayak, an AI-powered advisory system for farmers. Your name is "Krishi Dost".
 
@@ -49,16 +92,6 @@ const prompt = ai.definePrompt({
   The user has provided an image. Analyze the image and use it as the primary context for your response. If the user's message is related to the image, provide a detailed analysis. If the message is not related, you can acknowledge the image and answer the question.
   Image: {{media url=photoDataUri}}
   {{/if}}
-
-  Here is the conversation history:
-  {{#each history}}
-  {{#if (eq role 'user')}}
-  User: {{{content}}}
-  {{/if}}
-  {{#if (eq role 'model')}}
-  Krishi Dost: {{{content}}}
-  {{/if}}
-  {{/each}}
 
   Please provide a helpful and concise response to the last user message.`,
 });
@@ -79,7 +112,14 @@ const chatbotFlow = ai.defineFlow(
       }
     }
     
-    const {output} = await prompt(input);
-    return output!;
+    const response = await ai.generate({
+      prompt: chatbotPrompt.prompt,
+      history: input.history,
+      input: {
+        photoDataUri: input.photoDataUri
+      }
+    });
+
+    return { response: response.text };
   }
 );
