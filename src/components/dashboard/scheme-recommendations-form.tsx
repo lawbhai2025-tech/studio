@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useEffect, useRef, useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { getSchemeRecommendations, type SchemeRecommendationState } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +26,7 @@ function SubmitButton() {
 
 export function SchemeRecommendationsForm() {
   const initialState: SchemeRecommendationState = {};
-  const [state, formAction] = useFormState(getSchemeRecommendations, initialState);
+  const [state, formAction] = useActionState(getSchemeRecommendations, initialState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

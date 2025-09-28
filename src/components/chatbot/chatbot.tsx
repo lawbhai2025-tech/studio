@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useEffect, useRef, useState, useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import { getChatbotResponseAction, type ChatbotState } from '@/app/actions';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ export function Chatbot() {
       },
     ],
   };
-  const [state, formAction] = useFormState(getChatbotResponseAction, initialState);
+  const [state, formAction] = useActionState(getChatbotResponseAction, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useState, useEffect, useRef, useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import { getCropAdvice, type CropAdviceState } from "@/app/actions";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ function SubmitButton() {
 
 export function CropAdviceForm() {
   const initialState: CropAdviceState = {};
-  const [state, formAction] = useFormState(getCropAdvice, initialState);
+  const [state, formAction] = useActionState(getCropAdvice, initialState);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
