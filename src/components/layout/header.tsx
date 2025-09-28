@@ -2,7 +2,7 @@
 import { Logo } from "@/components/icons/logo";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 
 export function Header() {
   return (
@@ -31,6 +31,11 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="hidden lg:flex">Officer Dashboard</Button>
+          <Link href="/profile">
+            <Button variant="ghost" size="icon">
+              <User />
+            </Button>
+          </Link>
           <Button className="bg-green-600 hover:bg-green-700">Download App</Button>
         </div>
       </div>
