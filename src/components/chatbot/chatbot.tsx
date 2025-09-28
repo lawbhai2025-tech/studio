@@ -32,7 +32,15 @@ function SubmitButton() {
 }
 
 export function Chatbot() {
-  const initialState: ChatbotState = { messages: [] };
+  const initialState: ChatbotState = {
+    messages: [
+      {
+        role: 'model',
+        content:
+          'Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?',
+      },
+    ],
+  };
   const [state, formAction] = useFormState(getChatbotResponseAction, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -54,6 +62,9 @@ export function Chatbot() {
       setImagePreview(null);
       setPhotoDataUri('');
       setTranscript('');
+      if (messageInputRef.current) {
+        messageInputRef.current.value = '';
+      }
     }
   }, [state]);
 
@@ -87,12 +98,15 @@ export function Chatbot() {
         .map(result => result.transcript)
         .join('');
       setTranscript(currentTranscript);
+      if (messageInputRef.current) {
+        messageInputRef.current.value = currentTranscript;
+      }
     };
 
     recognition.onend = () => {
       setIsRecording(false);
       if (messageInputRef.current && transcript !== 'Listening...') {
-        messageInputRef.current.value = transcript;
+        // The transcript is already in the input field from onresult
       }
       setTranscript(''); // Clear after setting input
     };
@@ -117,6 +131,16 @@ export function Chatbot() {
       fileInputRef.current.value = '';
     }
   };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    if (!formData.get('message') && !photoDataUri) {
+        // You can show a toast or an alert here
+        return;
+    }
+    formAction(formData);
+  }
 
   return (
     <div className="h-full flex flex-col p-4 md:p-6">
@@ -164,6 +188,7 @@ export function Chatbot() {
         <form
           ref={formRef}
           action={formAction}
+          onSubmit={handleSubmit}
           className="flex flex-col gap-2"
         >
           {imagePreview && (
