@@ -39,6 +39,23 @@ export function Chatbot() {
         content:
           'Hello! I am Krishi Dost, your AI assistant. How can I help you with your farming needs today?',
       },
+      {
+        role: 'user',
+        content: 'What is the best fertilizer for wheat crops?',
+      },
+      {
+        role: 'model',
+        content:
+          'For wheat, a balanced NPK fertilizer is recommended. For specific dosages, could you please tell me about your soil type and location?',
+      },
+      {
+        role: 'user',
+        content: 'My farm is in Punjab and the soil is loamy.',
+      },
+      {
+        role: 'model',
+        content: 'Thank you. For loamy soil in Punjab, a good starting point for wheat is an NPK ratio of 120:60:40 kg/ha. It\'s always best to get a soil test for precise recommendations.',
+      }
     ],
   };
   const [state, formAction] = useActionState(getChatbotResponseAction, initialState);
