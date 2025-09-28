@@ -5,20 +5,104 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
+const initialWeatherData = {
+  condition: 'Loading...',
+  temperature: '--°C',
+  humidity: '--%',
+  windSpeed: '-- km/h',
+  alert: 'Loading weather data...',
+  icon: '⏳',
+  alertType: 'info',
+  background: 'from-gray-300 via-slate-400 to-gray-500',
+  overlay: 'bg-gray-50/70'
+};
+
+
 export function WeatherCard({ className = "" }) {
   const [currentWeather, setCurrentWeather] = useState('cloudy');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [weatherData, setWeatherData] = useState(initialWeatherData);
+  const [isClient, setIsClient] = useState(false);
 
   const weatherConditions = ['sunny', 'cloudy', 'rain', 'storm'];
 
   useEffect(() => {
-    // This code will only run on the client, after the component has mounted.
-    // This prevents hydration mismatch errors.
+    setIsClient(true);
     
-    // Start with sunny weather
+    const updateWeatherData = () => {
+      const date = new Date();
+      setCurrentTime(date);
+      
+      const hour = date.getHours();
+      const month = date.getMonth();
+      const isRainySeason = month >= 5 && month <= 9;
+
+      const getRealisticTemp = (baseTemp: number) => {
+        const hourVariation = Math.sin(((hour - 6) * Math.PI) / 12) * 5;
+        const randomVariation = (Math.random() - 0.5) * 4;
+        return Math.round(baseTemp + hourVariation + randomVariation);
+      };
+
+      const newWeatherData = {
+        sunny: {
+          condition: 'Sunny',
+          temperature: `${getRealisticTemp(isRainySeason ? 30 : 33)}°C`,
+          humidity: `${Math.round(40 + Math.random() * 20)}%`,
+          windSpeed: `${Math.round(5 + Math.random() * 10)} km/h`,
+          alert: hour < 10 
+            ? 'Perfect morning weather for field work and spraying' 
+            : hour > 15 
+            ? 'Hot afternoon - avoid heavy work, ensure adequate hydration'
+            : 'Ideal conditions for transplanting and harvesting',
+          icon: '☀️',
+          alertType: 'success',
+          background: 'from-yellow-300 via-orange-300 to-red-300',
+          overlay: 'bg-yellow-50/70'
+        },
+        rain: {
+          condition: isRainySeason ? 'Monsoon Rain' : 'Light Rain',
+          temperature: `${getRealisticTemp(26)}°C`,
+          humidity: `${Math.round(75 + Math.random() * 20)}%`,
+          windSpeed: `${Math.round(10 + Math.random() * 15)} km/h`,
+          alert: isRainySeason 
+            ? 'Monsoon active - postpone pesticide application, check drainage systems'
+            : 'Light rain beneficial for crops - good time for organic fertilizer application',
+          icon: '🌧️',
+          alertType: 'warning',
+          background: 'from-slate-500 via-blue-600 to-slate-700',
+          overlay: 'bg-blue-50/75'
+        },
+        cloudy: {
+          condition: 'Partly Cloudy',
+          temperature: `${getRealisticTemp(29)}°C`,
+          humidity: `${Math.round(60 + Math.random() * 20)}%`,
+          windSpeed: `${Math.round(8 + Math.random() * 10)} km/h`,
+          alert: 'Excellent conditions for transplanting - reduced heat stress on seedlings',
+          icon: '⛅',
+          alertType: 'info',
+          background: 'from-gray-300 via-slate-400 to-gray-500',
+          overlay: 'bg-gray-50/70'
+        },
+        storm: {
+          condition: 'Thunderstorm',
+          temperature: `${getRealisticTemp(24)}°C`,
+          humidity: `${Math.round(85 + Math.random() * 10)}%`,
+          windSpeed: `${Math.round(25 + Math.random() * 20)} km/h`,
+          alert: 'Severe weather alert! Secure loose equipment, avoid open fields, check livestock shelter',
+          icon: '⛈️',
+          alertType: 'danger',
+          background: 'from-slate-800 via-gray-900 to-black',
+          overlay: 'bg-slate-50/60'
+        }
+      };
+      setWeatherData(newWeatherData[currentWeather as keyof typeof newWeatherData] || newWeatherData.cloudy);
+    }
+    
+    // Initial update
+    updateWeatherData();
     setCurrentWeather('sunny');
-    
-    // Cycle through all weather conditions every 5 seconds for demo
+
+    // Cycle through weather conditions for demo
     const weatherInterval = setInterval(() => {
       setCurrentWeather(prevWeather => {
         const currentIndex = weatherConditions.indexOf(prevWeather);
@@ -26,6 +110,9 @@ export function WeatherCard({ className = "" }) {
         return weatherConditions[nextIndex];
       });
     }, 5000);
+    
+    // Update data every cycle
+    const dataInterval = setInterval(updateWeatherData, 5000);
 
     // Update time every minute
     const timeInterval = setInterval(() => {
@@ -35,81 +122,13 @@ export function WeatherCard({ className = "" }) {
     return () => {
       clearInterval(weatherInterval);
       clearInterval(timeInterval);
+      clearInterval(dataInterval);
     };
-  }, []); // Empty dependency array means this effect runs only once on the client.
+  }, [currentWeather]);
+  
+  const currentWeatherData = isClient ? weatherData : initialWeatherData;
 
-  const getWeatherData = () => {
-    const hour = currentTime.getHours();
-    const month = currentTime.getMonth();
-    const isRainySeason = month >= 5 && month <= 9;
-    
-    const getRealisticTemp = (baseTemp) => {
-      // Math.random() can cause hydration issues if run on both server and client.
-      // Since this whole function is now effectively client-side due to the useEffect, it's safe.
-      const hourVariation = Math.sin(((hour - 6) * Math.PI) / 12) * 5;
-      const randomVariation = (Math.random() - 0.5) * 4;
-      return Math.round(baseTemp + hourVariation + randomVariation);
-    };
-
-    const weatherData = {
-      sunny: {
-        condition: 'Sunny',
-        temperature: `${getRealisticTemp(isRainySeason ? 30 : 33)}°C`,
-        humidity: `${Math.round(40 + Math.random() * 20)}%`,
-        windSpeed: `${Math.round(5 + Math.random() * 10)} km/h`,
-        alert: hour < 10 
-          ? 'Perfect morning weather for field work and spraying' 
-          : hour > 15 
-          ? 'Hot afternoon - avoid heavy work, ensure adequate hydration'
-          : 'Ideal conditions for transplanting and harvesting',
-        icon: '☀️',
-        alertType: 'success',
-        background: 'from-yellow-300 via-orange-300 to-red-300',
-        overlay: 'bg-yellow-50/70'
-      },
-      rain: {
-        condition: isRainySeason ? 'Monsoon Rain' : 'Light Rain',
-        temperature: `${getRealisticTemp(26)}°C`,
-        humidity: `${Math.round(75 + Math.random() * 20)}%`,
-        windSpeed: `${Math.round(10 + Math.random() * 15)} km/h`,
-        alert: isRainySeason 
-          ? 'Monsoon active - postpone pesticide application, check drainage systems'
-          : 'Light rain beneficial for crops - good time for organic fertilizer application',
-        icon: '🌧️',
-        alertType: 'warning',
-        background: 'from-slate-500 via-blue-600 to-slate-700',
-        overlay: 'bg-blue-50/75'
-      },
-      cloudy: {
-        condition: 'Partly Cloudy',
-        temperature: `${getRealisticTemp(29)}°C`,
-        humidity: `${Math.round(60 + Math.random() * 20)}%`,
-        windSpeed: `${Math.round(8 + Math.random() * 10)} km/h`,
-        alert: 'Excellent conditions for transplanting - reduced heat stress on seedlings',
-        icon: '⛅',
-        alertType: 'info',
-        background: 'from-gray-300 via-slate-400 to-gray-500',
-        overlay: 'bg-gray-50/70'
-      },
-      storm: {
-        condition: 'Thunderstorm',
-        temperature: `${getRealisticTemp(24)}°C`,
-        humidity: `${Math.round(85 + Math.random() * 10)}%`,
-        windSpeed: `${Math.round(25 + Math.random() * 20)} km/h`,
-        alert: 'Severe weather alert! Secure loose equipment, avoid open fields, check livestock shelter',
-        icon: '⛈️',
-        alertType: 'danger',
-        background: 'from-slate-800 via-gray-900 to-black',
-        overlay: 'bg-slate-50/60'
-      }
-    };
-
-    return weatherData[currentWeather] || weatherData.cloudy;
-  };
-
-  const currentWeatherData = getWeatherData();
-
-  const getAlertStyles = (type) => {
+  const getAlertStyles = (type: string) => {
     switch (type) {
       case 'warning':
         return 'border-l-orange-500 text-orange-700';
@@ -122,7 +141,7 @@ export function WeatherCard({ className = "" }) {
     }
   };
 
-  const formatTime = (date) => {
+  const formatTime = (date: Date) => {
     return date.toLocaleString('en-IN', {
       weekday: 'short',
       month: 'short', 
@@ -134,6 +153,8 @@ export function WeatherCard({ className = "" }) {
   };
 
   const renderWeatherAnimation = () => {
+    if (!isClient) return null;
+
     switch (currentWeather) {
       case 'rain':
         return (
@@ -342,9 +363,9 @@ export function WeatherCard({ className = "" }) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <p className="font-medium">Weather Advisory</p>
-                <Badge variant="outline" className="text-xs">
+                {isClient && <Badge variant="outline" className="text-xs">
                   Palakkad • {formatTime(currentTime)}
-                </Badge>
+                </Badge>}
               </div>
               <p className="text-sm mt-1">{currentWeatherData.alert}</p>
             </div>
@@ -367,7 +388,7 @@ export function WeatherCard({ className = "" }) {
               </h3>
               <p className="text-3xl font-bold mt-2 text-gray-800">{currentWeatherData.temperature}</p>
               <p className="text-sm text-gray-600">{currentWeatherData.condition}</p>
-              <p className="text-xs text-gray-500 mt-1">Last updated: {formatTime(currentTime)}</p>
+              {isClient && <p className="text-xs text-gray-500 mt-1">Last updated: {formatTime(currentTime)}</p>}
             </div>
           </div>
           
