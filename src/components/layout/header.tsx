@@ -27,7 +27,7 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/advisory">AI Advisory</NavLink>
-          <NavLink href="/advisory">Gov Schemes</NavLink>
+          <NavLink href="/schemes">Gov Schemes</NavLink>
           <NavLink href="/chatbot">Chatbot</NavLink>
           <NavLink href="/weather">Weather</NavLink>
         </nav>
@@ -62,7 +62,7 @@ export function Header() {
                     <NavLink href="/advisory">AI Advisory</NavLink>
                   </SheetClose>
                   <SheetClose asChild>
-                    <NavLink href="/advisory">Gov Schemes</NavLink>
+                    <NavLink href="/schemes">Gov Schemes</NavLink>
                   </SheetClose>
                   <SheetClose asChild>
                     <NavLink href="/chatbot">Chatbot</NavLink>
