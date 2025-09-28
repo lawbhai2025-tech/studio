@@ -8,9 +8,9 @@ export function AIAdvisory() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>AI Advisory</CardTitle>
+        <CardTitle>Crop Disease Prediction</CardTitle>
         <CardDescription>
-          Get instant, personalized advice powered by AI.
+          Get instant, personalized predictions powered by AI.
         </CardDescription>
       </CardHeader>
       <CardContent>
