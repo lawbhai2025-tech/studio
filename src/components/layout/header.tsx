@@ -23,7 +23,10 @@ export function Header() {
         </div>
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/advisory">For Farmers</NavLink>
+          <NavLink href="/advisory">AI Advisory</NavLink>
+          <NavLink href="/advisory">Gov Schemes</NavLink>
+          <NavLink href="/chatbot">Chatbot</NavLink>
+          <NavLink href="/weather">Weather</NavLink>
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="outline" className="hidden lg:flex">Officer Dashboard</Button>
