@@ -58,3 +58,119 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes rain {
+    0% { transform: translateY(-100px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  .animate-rain {
+    animation: rain linear infinite;
+  }
+
+  @keyframes rain-splash {
+    0% { transform: scale(0); opacity: 1; }
+    80% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  .animate-rain-splash {
+    animation: rain-splash ease-out infinite;
+    animation-duration: 0.5s;
+  }
+
+  @keyframes cloud-move {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(300%); }
+  }
+  .animate-cloud-move {
+    animation: cloud-move 25s linear infinite;
+  }
+  
+  @keyframes cloud-move-slow {
+    0% { transform: translateX(-150%); }
+    100% { transform: translateX(250%); }
+  }
+  .animate-cloud-move-slow {
+      animation: cloud-move-slow 40s linear infinite;
+  }
+
+  @keyframes cloud-move-reverse {
+      0% { transform: translateX(300%); }
+      100% { transform: translateX(-100%); }
+  }
+  .animate-cloud-move-reverse {
+      animation: cloud-move-reverse 35s linear infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.7; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  .animate-twinkle {
+    animation: twinkle 2.5s ease-in-out infinite;
+  }
+
+  @keyframes heat-shimmer {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-20px) scale(1.1); opacity: 0; }
+  }
+  .animate-heat-shimmer {
+    animation: heat-shimmer 3s ease-out infinite;
+  }
+  
+  @keyframes lightning {
+    0%, 100% { opacity: 0; }
+    5%, 95% { opacity: 0; }
+    6% { opacity: 1; }
+    8% { opacity: 0.2; }
+    10% { opacity: 1; }
+    15% { opacity: 0; }
+  }
+  .animate-lightning {
+    animation: lightning 6s linear infinite;
+  }
+
+  @keyframes heavy-rain {
+    0% { transform: translateY(-100px) skew(-15deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(100vh) skew(-15deg); opacity: 0; }
+  }
+  .animate-heavy-rain {
+    animation: heavy-rain linear infinite;
+  }
+
+  @keyframes wind-gust {
+    0% { transform: translateX(-100%); opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+  .animate-wind-gust {
+    animation: wind-gust 2s ease-in-out infinite;
+  }
+
+  @keyframes snow {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(100vh); opacity: 1; }
+  }
+  .animate-snow {
+    animation: snow linear infinite;
+  }
+}
