@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Phone, MapPin, Mic, Camera, LineChart, Bell, ArrowRight, ChevronRight, PlayCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -66,9 +67,11 @@ const HeroSection = () => (
         </div>
 
         <div className="flex flex-wrap items-center gap-4 pt-4">
-          <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white shadow-lg">
-            Start Talking Now <ArrowRight className="ml-2" />
-          </Button>
+          <Link href="/chatbot">
+            <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white shadow-lg">
+              Start Talking Now <ArrowRight className="ml-2" />
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="bg-white hover:bg-gray-50 shadow-lg">
             See How It Works <PlayCircle className="ml-2" />
           </Button>
@@ -133,7 +136,7 @@ const ChatPreview = () => (
           <ChatMessage role="user" time="10:44">എൻ്റെ നെൽവയലിൽ ഇലകൾ മഞ്ഞയായി വരുന്നു ☹️ എന്ത് ചെയ്യണം?</ChatMessage>
           <div className="flex justify-start">
              <div className="bg-white p-2 rounded-lg shadow-sm w-28 h-20">
-                <Image src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=200" alt="Paddy field" width={100} height={70} className="rounded" />
+                <Image data-ai-hint="paddy field" src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=200" alt="Paddy field" width={100} height={70} className="rounded" />
              </div>
           </div>
            <ChatMessage role="model" time="10:47">ഫോട്ടോ വിശകലനം ചെയ്യുന്നു... 🔬 നൈട്രജൻ കുറവാണ്! യൂറിയ വളം 50kg/ഏക്കർ നൽകുക 🌱</ChatMessage>

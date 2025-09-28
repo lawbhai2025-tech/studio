@@ -23,7 +23,7 @@ export function Header() {
         </div>
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Home</NavLink>
-          <NavLink href="#" hasDropdown>For Farmers</NavLink>
+          <NavLink href="/advisory" hasDropdown>For Farmers</NavLink>
           <NavLink href="#">Weather</NavLink>
           <NavLink href="#" hasDropdown>For Officers</NavLink>
           <NavLink href="#">Resources</NavLink>
